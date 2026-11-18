@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">  
+<head>
+     <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16324f">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedTracker | Health, Organized</title>
+<style>
+:root{--navy:#16324f;--blue:#2878d0;--pale:#eef6ff;--bg:#f5f8fc;--text:#203044;--muted:#718096;--green:#16865b;--amber:#b7791f;--red:#c53030;--line:#e4ebf3;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--white);border-bottom:1px solid var(--line);padding:16px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:800;color:var(--navy)}.brand-mark{background:var(--blue);color:white;border-radius:12px;width:36px;height:36px;display:grid;place-items:center;font-size:23px}
+header small{color:var(--muted)}.layout{display:flex;min-height:calc(100vh - 69px)}aside{width:225px;background:#fff;border-right:1px solid var(--line);padding:24px 14px;flex-shrink:0}
+.nav{width:100%;border:0;background:transparent;text-align:left;padding:12px 14px;margin:3px 0;border-radius:10px;color:#526276;font-size:14px;cursor:pointer}.nav.active,.nav:hover{background:var(--pale);color:var(--blue);font-weight:700}
+main{padding:30px;max-width:1400px;width:100%;margin:auto}.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px}.page-head h1{margin:0 0 6px;font-size:27px;color:var(--navy)}.sub{color:var(--muted);font-size:14px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer}.btn:hover{background:#1e65b2}.btn.secondary{background:#eaf2fb;color:var(--blue)}.btn.danger{background:#fff0f0;color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px;box-shadow:0 3px 12px #1c35500a}.stat-label{color:var(--muted);font-size:13px}.stat-value{font-size:29px;font-weight:800;margin:9px 0 4px;color:var(--navy)}.stat-note{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.card h2{font-size:17px;margin:0 0 16px;color:var(--navy)}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}.item-title{font-weight:700;font-size:14px}.item-meta{font-size:12px;color:var(--muted);margin-top:4px}.pill{font-size:11px;font-weight:700;padding:5px 9px;border-radius:20px;white-space:nowrap}.safe{background:#e7f7ef;color:var(--green)}.soon{background:#fff5df;color:var(--amber)}.expired{background:#ffebeb;color:var(--red)}
+.section{display:none}.section.active{display:block}.toolbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.search{padding:10px 12px;border:1px solid var(--line);border-radius:9px;min-width:220px;font:inherit}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600;background:#fbfcfe}td{color:#334155}
+form{display:grid;grid-template-columns:1fr 1fr;gap:13px}label{font-size:12px;font-weight:700;color:#526276;display:block;margin-bottom:6px}input,select,textarea{width:100%;padding:10px 11px;border:1px solid #dbe4ee;border-radius:8px;font:inherit;background:#fff;color:var(--text)}input:focus,select:focus,textarea:focus{outline:2px solid #c8e0ff;border-color:var(--blue)}.full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:6px}
+.modal{position:fixed;inset:0;background:#14283d80;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal.show{display:flex}.modal-box{background:#fff;border-radius:16px;padding:24px;width:min(560px,100%);max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h2{margin:0;color:var(--navy)}.close{border:0;background:#eef2f7;border-radius:50%;width:32px;height:32px;cursor:pointer}
+.empty{padding:25px;text-align:center;color:var(--muted);font-size:14px}.notice{padding:12px 14px;border-radius:10px;background:#fff8e8;color:#805b16;font-size:13px;margin-bottom:16px}.chart-wrap{height:250px;position:relative}canvas{width:100%;height:100%}.record-select{max-width:260px}
+footer{text-align:center;color:#98a4b3;font-size:11px;padding:28px}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}aside{width:65px;padding:15px 7px}.nav{font-size:0;text-align:center;padding:13px 4px}.nav span{font-size:18px}main{padding:20px 14px}}
+@media(max-width:520px){header{padding:13px 15px}.stats{gap:9px}.card{padding:14px}.stat-value{font-size:24px}.page-head{align-items:flex-start;flex-direction:column}.page-head h1{font-size:23px}form{grid-template-columns:1fr}.full{grid-column:auto}table{min-width:600px}.table-scroll{overflow-x:auto}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="brand-mark">+</div>MedTracker</div><small>Smart medicine & health management</small></header>
+<div class="layout">
+<aside>
+<button class="nav active" data-page="dashboard"><span>▦</span> &nbsp; Dashboard</button>
+<button class="nav" data-page="medicines"><span>💊</span> &nbsp; Medicines</button>
+<button class="nav" data-page="health"><span>♥</span> &nbsp; Health Records</button>
+<button class="nav" data-page="comparison"><span>⌁</span> &nbsp; Comparison</button>
+<button class="nav" data-page="disposal"><span>♻</span> &nbsp; Disposal</button>
+</aside>
+<main>
+<section id="dashboard" class="section active">
+<div class="page-head"><div><h1>Dashboard</h1><div class="sub">A clear view of your medicines and health.</div></div><button class="btn" onclick="openModal('medicineModal')">＋ Add medicine</button></div>
+<div class="stats">
+<div class="card"><div class="stat-label">Total medicines</div><div class="stat-value" id="totalStat">0</div><div class="stat-note">In your medicine list</div></div>
+<div class="card"><div class="stat-label">Expiring soon</div><div class="stat-value" id="soonStat">0</div><div class="stat-note">Within the next 30 days</div></div>
+<div class="card"><div class="stat-label">Expired medicines</div><div class="stat-value" id="expiredStat">0</div><div class="stat-note">Please review for safe disposal</div></div>
+<div class="card"><div class="stat-label">Health check-ups</div><div class="stat-value" id="healthStat">0</div><div class="stat-note">Records saved</div></div>
+</div>
+<div class="grid">
+<div class="card"><h2>Medicine expiry overview</h2><div id="dashboardMedicines"></div></div>
+<div class="card"><h2>Latest health record</h2><div id="latestHealth"></div></div>
+</div>
+</section>
+<section id="medicines" class="section">
+<div class="page-head"><div><h1>Medicine tracker</h1><div class="sub">Keep track of medicine details and expiry dates.</div></div><button class="btn" onclick="openModal('medicineModal')">＋ Add medicine</button></div>
+<div class="notice">Reminder: Check the packaging and consult a pharmacist for safe disposal. Do not use medicines past their expiry date.</div>
+<div class="card"><div class="toolbar"><h2>My medicines</h2><input class="search" id="medicineSearch" placeholder="Search medicines..." oninput="renderMedicines()"></div><div class="table-scroll"><table><thead><tr><th>Medicine</th><th>Quantity</th><th>Expiry date</th><th>Status</th><th>Action</th></tr></thead><tbody id="medicineRows"></tbody></table></div></div>
+</section>
+<section id="health" class="section">
+<div class="page-head"><div><h1>Health records</h1><div class="sub">Save your monthly health check-up measurements.</div></div><button class="btn" onclick="openModal('healthModal')">＋ Add health record</button></div>
+<div class="card"><h2>Previous check-ups</h2><div class="table-scroll"><table><thead><tr><th>Date</th><th>Weight</th><th>Blood pressure</th><th>Blood sugar</th><th>Notes</th></tr></thead><tbody id="healthRows"></tbody></table></div></div>
+</section>
+<section id="comparison" class="section">
+<div class="page-head"><div><h1>Health comparison</h1><div class="sub">Compare saved measurements over time.</div></div></div>
+<div class="card"><div class="toolbar"><h2>Weight trend</h2><select class="record-select" id="metricSelect" onchange="drawChart()"><option value="weight">Weight (kg)</option><option value="sugar">Blood sugar (mg/dL)</option></select></div><div class="chart-wrap"><canvas id="healthChart"></canvas></div><div id="comparisonText" class="sub"></div></div>
+</section>
+<section id="disposal" class="section">
+<div class="page-head"><div><h1>Responsible disposal</h1><div class="sub">Review expired medicines and record when they are disposed of.</div></div></div>
+<div class="notice">Do not flush medicines or throw them into regular waste unless local guidance specifically says to. Ask a pharmacist or local health authority about medicine take-back options.</div>
+<div class="card"><h2>Expired medicines</h2><div id="disposalRows"></div></div>
+</section>
+<footer>MedTracker • Demo project • Your information is stored in this browser only.</footer>
+</main>
+</div>
+
+<div class="modal" id="medicineModal"><div class="modal-box"><div class="modal-head"><h2>Add a medicine</h2><button class="close" onclick="closeModal('medicineModal')">✕</button></div>
+<form id="medicineForm">
+<div><label>Medicine name *</label><input name="name" required placeholder="e.g. Paracetamol"></div>
+<div><label>Quantity *</label><input name="quantity" required type="number" min="0" placeholder="e.g. 10"></div>
+<div><label>Expiry date *</label><input name="expiry" required type="date"></div>
+<div><label>Category</label><select name="category"><option>Tablet</option><option>Capsule</option><option>Syrup</option><option>Cream</option><option>Other</option></select></div>
+<div class="full"><label>Notes (optional)</label><input name="notes" placeholder="Storage or other notes"></div>
+<div class="full form-actions"><button type="button" class="btn secondary" onclick="closeModal('medicineModal')">Cancel</button><button class="btn">Save medicine</button></div>
+</form></div></div>
+
+<div class="modal" id="healthModal"><div class="modal-box"><div class="modal-head"><h2>Add health record</h2><button class="close" onclick="closeModal('healthModal')">✕</button></div>
+<form id="healthForm">
+<div><label>Check-up date *</label><input name="date" type="date" required></div>
+<div><label>Weight (kg)</label><input name="weight" type="number" min="0" step=".1" placeholder="e.g. 65.5"></div>
+<div><label>Blood pressure (mmHg)</label><input name="bp" placeholder="e.g. 120/80"></div>
+<div><label>Blood sugar (mg/dL)</label><input name="sugar" type="number" min="0" step=".1" placeholder="e.g. 95"></div>
+<div class="full"><label>Notes</label><textarea name="notes" rows="3" placeholder="Optional observations"></textarea></div>
+<div class="full form-actions"><button type="button" class="btn secondary" onclick="closeModal('healthModal')">Cancel</button><button class="btn">Save record</button></div>
+</form></div></div>
+<script>
+const $ = id => document.getElementById(id);
+let medicines = JSON.parse(localStorage.getItem('mt_medicines') || '[]');
+let healthRecords = JSON.parse(localStorage.getItem('mt_health') || '[]');
+let disposed = JSON.parse(localStorage.getItem('mt_disposed') || '[]');
+const today = () => {const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())};
+const dateText = value => value ? new Date(value+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}) : '—';
+function daysTo(date){return Math.ceil((new Date(date+'T00:00:00')-today())/86400000)}
+function status(m){const n=daysTo(m.expiry);return n<0?['Expired','expired']:n<=30?['Expiring soon','soon']:['Valid','safe']}
+function save(){localStorage.setItem('mt_medicines',JSON.stringify(medicines));localStorage.setItem('mt_health',JSON.stringify(healthRecords));localStorage.setItem('mt_disposed',JSON.stringify(disposed));renderAll()}
+function openModal(id){$(id).classList.add('show');if(id==='healthModal'&&!$('healthForm').date.value)$('healthForm').date.value=new Date().toISOString().slice(0,10)}
+function closeModal(id){$(id).classList.remove('show')}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.page).classList.add('active');if(b.dataset.page==='comparison')drawChart()}));
+$('medicineForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);medicines.push({id:Date.now(),name:f.get('name').trim(),quantity:f.get('quantity'),expiry:f.get('expiry'),category:f.get('category'),notes:f.get('notes')});e.target.reset();closeModal('medicineModal');save()});
+$('healthForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);healthRecords.push({id:Date.now(),date:f.get('date'),weight:f.get('weight'),bp:f.get('bp'),sugar:f.get('sugar'),notes:f.get('notes')});e.target.reset();closeModal('healthModal');save()});
+function renderMedicines(){const q=($('medicineSearch')?.value||'').toLowerCase();const list=medicines.filter(m=>m.name.toLowerCase().includes(q)).sort((a,b)=>a.expiry.localeCompare(b.expiry));$('medicineRows').innerHTML=list.length?list.map(m=>{const s=status(m);return `<tr><td><b>${esc(m.name)}</b><br><small>${esc(m.category||'')}</small></td><td>${esc(m.quantity)}</td><td>${dateText(m.expiry)}</td><td><span class="pill ${s[1]}">${s[0]}</span></td><td><button class="btn secondary" onclick="removeMedicine(${m.id})">Remove</button></td></tr>`}).join(''):'<tr><td colspan="5" class="empty">No medicines added yet.</td></tr>'}
+function removeMedicine(id){if(confirm('Remove this medicine from your list?')){medicines=medicines.filter(m=>m.id!==id);save()}}
+function renderHealth(){const list=[...healthRecords].sort((a,b)=>b.date.localeCompare(a.date));$('healthRows').innerHTML=list.length?list.map(r=>`<tr><td>${dateText(r.date)}</td><td>${r.weight?esc(r.weight)+' kg':'—'}</td><td>${esc(r.bp||'—')}</td><td>${r.sugar?esc(r.sugar)+' mg/dL':'—'}</td><td>${esc(r.notes||'—')}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No health records yet.</td></tr>'}
+function renderDashboard(){const active=medicines.filter(m=>!disposed.includes(m.id));const soon=active.filter(m=>{let n=daysTo(m.expiry);return n>=0&&n<=30});const expired=active.filter(m=>daysTo(m.expiry)<0);$('totalStat').textContent=active.length;$('soonStat').textContent=soon.length;$('expiredStat').textContent=expired.length;$('healthStat').textContent=healthRecords.length;
+const sorted=[...active].sort((a,b)=>a.expiry.localeCompare(b.expiry)).slice(0,5);$('dashboardMedicines').innerHTML=sorted.length?sorted.map(m=>{let s=status(m);return `<div class="row"><div><div class="item-title">${esc(m.name)}</div><div class="item-meta">Expires ${dateText(m.expiry)}</div></div><span class="pill ${s[1]}">${s[0]}</span></div>`}).join(''):'<div class="empty">Add your first medicine to get started.</div>';
+const latest=[...healthRecords].sort((a,b)=>b.date.localeCompare(a.date))[0];$('latestHealth').innerHTML=latest?`<div class="item-meta">${dateText(latest.date)}</div><div class="row"><span>Weight</span><b>${latest.weight?esc(latest.weight)+' kg':'—'}</b></div><div class="row"><span>Blood pressure</span><b>${esc(latest.bp||'—')}</b></div><div class="row"><span>Blood sugar</span><b>${latest.sugar?esc(latest.sugar)+' mg/dL':'—'}</b></div>`:'<div class="empty">Your latest check-up will appear here.</div>'}
+function renderDisposal(){const list=medicines.filter(m=>daysTo(m.expiry)<0&&!disposed.includes(m.id));$('disposalRows').innerHTML=list.length?list.map(m=>`<div class="row"><div><div class="item-title">${esc(m.name)}</div><div class="item-meta">Expired ${dateText(m.expiry)}</div></div><button class="btn secondary" onclick="markDisposed(${m.id})">Mark disposed</button></div>`).join(''):'<div class="empty">No expired medicines waiting for disposal.</div>'}
+function markDisposed(id){if(confirm('Confirm that this medicine has been disposed of responsibly?')){disposed.push(id);save()}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function drawChart(){const canvas=$('healthChart'),ctx=canvas.getContext('2d'),metric=$('metricSelect').value;const records=[...healthRecords].filter(r=>r[metric]!==''&&r[metric]!=null).sort((a,b)=>a.date.localeCompare(b.date));const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;ctx.scale(dpr,dpr);const w=rect.width,h=rect.height;ctx.clearRect(0,0,w,h);
+if(!records.length){ctx.fillStyle='#718096';ctx.font='14px Arial';ctx.textAlign='center';ctx.fillText('Add at least one measurement to see your chart.',w/2,h/2);$('comparisonText').textContent='';return}
+const vals=records.map(r=>Number(r[metric])),min=Math.min(...vals)*.9,max=Math.max(...vals)*1.1||1,range=max-min||1,left=42,right=15,top=20,bottom=35;
+ctx.strokeStyle='#e5edf5';ctx.lineWidth=1;for(let i=0;i<5;i++){let y=top+(h-top-bottom)*i/4;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();ctx.fillStyle='#718096';ctx.font='10px Arial';ctx.textAlign='right';ctx.fillText((max-(range*i/4)).toFixed(1),left-7,y+3)}
+const points=vals.map((v,i)=>({x:records.length===1?(left+w-right)/2:left+(w-left-right)*i/(records.length-1),y:top+(h-top-bottom)*(max-v)/range}));
+ctx.strokeStyle='#2878d0';ctx.lineWidth=2.5;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+points.forEach((p,i)=>{ctx.fillStyle='#2878d0';ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#64748b';ctx.font='10px Arial';ctx.textAlign='center';ctx.fillText(new Date(records[i].date+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}),p.x,h-10)});
+const first=vals[0],last=vals[vals.length-1],diff=last-first;$('comparisonText').textContent=records.length>1?`From first to latest record: ${diff>0?'+':''}${diff.toFixed(1)} ${metric==='weight'?'kg':'mg/dL'}. This is a measurement comparison, not a medical interpretation.`:'Add another record to compare changes over time.'}
+function renderAll(){renderMedicines();renderHealth();renderDashboard();renderDisposal();if($('comparison').classList.contains('active'))drawChart()}
+window.addEventListener('resize',()=>{if($('comparison').classList.contains('active'))drawChart()});
+renderAll();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(() => console.log("App ready"))
+            .catch(error => console.log(error));
+    });
+}
+</script>
+</body>
+</html>
